@@ -2,6 +2,7 @@ package com.wangli.review.designpattern.strategy;
 
 import lombok.Data;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -65,6 +66,45 @@ public class StrategyPattern {
             person1.setName("张三");
             FUNC_MAP.get(person.gender).accept(person.getName());
             FUNC_MAP.get(person1.gender).accept(person1.getName());
+        }
+
+    }
+
+    /**
+     * DDD领域驱动设计思想+策略模式写法
+     */
+    public static class DDDPerson{
+        private static String MAN = "man";
+        private static String WOMAN = "woman";
+
+        @Data
+        static class Person{
+            private String gender;
+            private String name;
+
+            private static Map<String, Consumer<String>> FUNC_MAP = new ConcurrentHashMap<>();
+            static {
+                FUNC_MAP.put(MAN,person ->{System.out.println(person + "应该去男厕所");});
+                FUNC_MAP.put(WOMAN,person ->{System.out.println(person + "应该去女厕所");});
+            }
+            public void goToWC(){
+                FUNC_MAP.get(gender).accept(name);
+            }
+        }
+
+        static class PersonFactory{
+            public static Person initPerson(String name ,String gender){
+                Person p = new Person();
+                p.setName(name);
+                p.setGender(gender);
+                return p;
+            }
+        }
+        public static void main(String[] args) {
+            Person p = PersonFactory.initPerson("张三",MAN);
+            Person p2 = PersonFactory.initPerson("张三他老婆",WOMAN);
+            p.goToWC();
+            p2.goToWC();
         }
 
     }
