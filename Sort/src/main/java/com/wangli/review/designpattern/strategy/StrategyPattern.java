@@ -103,6 +103,7 @@ public class StrategyPattern {
         public static void main(String[] args) {
             Person p = PersonFactory.initPerson("张三",MAN);
             Person p2 = PersonFactory.initPerson("张三他老婆",WOMAN);
+
             p.goToWC();
             p2.goToWC();
         }
